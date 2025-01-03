@@ -37,66 +37,7 @@ HookDict = OrderedDict[int, Callable]
 
 
 class MessagePassing(torch.nn.Module):
-    r"""Base class for creating message passing layers.
-
-    Message passing layers follow the form
-
-    .. math::
-        \mathbf{x}_i^{\prime} = \gamma_{\mathbf{\Theta}} \left( \mathbf{x}_i,
-        \bigoplus_{j \in \mathcal{N}(i)} \, \phi_{\mathbf{\Theta}}
-        \left(\mathbf{x}_i, \mathbf{x}_j,\mathbf{e}_{j,i}\right) \right),
-
-    where :math:`\bigoplus` denotes a differentiable, permutation invariant
-    function, *e.g.*, sum, mean, min, max or mul, and
-    :math:`\gamma_{\mathbf{\Theta}}` and :math:`\phi_{\mathbf{\Theta}}` denote
-    differentiable functions such as MLPs.
-    See `here <https://pytorch-geometric.readthedocs.io/en/latest/tutorial/
-    create_gnn.html>`__ for the accompanying tutorial.
-
-    Args:
-        aggr (str or [str] or Aggregation, optional): The aggregation scheme
-            to use, *e.g.*, :obj:`"sum"` :obj:`"mean"`, :obj:`"min"`,
-            :obj:`"max"` or :obj:`"mul"`.
-            In addition, can be any
-            :class:`~torch_geometric.nn.aggr.Aggregation` module (or any string
-            that automatically resolves to it).
-            If given as a list, will make use of multiple aggregations in which
-            different outputs will get concatenated in the last dimension.
-            If set to :obj:`None`, the :class:`MessagePassing` instantiation is
-            expected to implement its own aggregation logic via
-            :meth:`aggregate`. (default: :obj:`"add"`)
-        aggr_kwargs (Dict[str, Any], optional): Arguments passed to the
-            respective aggregation function in case it gets automatically
-            resolved. (default: :obj:`None`)
-        flow (str, optional): The flow direction of message passing
-            (:obj:`"source_to_target"` or :obj:`"target_to_source"`).
-            (default: :obj:`"source_to_target"`)
-        node_dim (int, optional): The axis along which to propagate.
-            (default: :obj:`-2`)
-        decomposed_layers (int, optional): The number of feature decomposition
-            layers, as introduced in the `"Optimizing Memory Efficiency of
-            Graph Neural Networks on Edge Computing Platforms"
-            <https://arxiv.org/abs/2104.03058>`_ paper.
-            Feature decomposition reduces the peak memory usage by slicing
-            the feature dimensions into separated feature decomposition layers
-            during GNN aggregation.
-            This method can accelerate GNN execution on CPU-based platforms
-            (*e.g.*, 2-3x speedup on the
-            :class:`~torch_geometric.datasets.Reddit` dataset) for common GNN
-            models such as :class:`~torch_geometric.nn.models.GCN`,
-            :class:`~torch_geometric.nn.models.GraphSAGE`,
-            :class:`~torch_geometric.nn.models.GIN`, etc.
-            However, this method is not applicable to all GNN operators
-            available, in particular for operators in which message computation
-            can not easily be decomposed, *e.g.* in attention-based GNNs.
-            The selection of the optimal value of :obj:`decomposed_layers`
-            depends both on the specific graph dataset and available hardware
-            resources.
-            A value of :obj:`2` is suitable in most cases.
-            Although the peak memory usage is directly associated with the
-            granularity of feature decomposition, the same is not necessarily
-            true for execution speedups. (default: :obj:`1`)
-    """
+    
 
     special_args: Set[str] = {
         'edge_index', 'adj_t', 'edge_index_i', 'edge_index_j', 'size',
